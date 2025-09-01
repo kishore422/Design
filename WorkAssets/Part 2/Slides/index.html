@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Voyage Slider | GSAP</title>
+
+  <!-- fixed google font link -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.1/css/all.min.css">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<div class="app">
+
+  <div class="cardList">
+    <button class="cardList__btn btn btn--left">
+      <div class="icon">
+        <svg><use xlink:href="#arrow-left"></use></svg>
+      </div>
+    </button>
+
+    <div class="cards__wrapper">
+      <!-- Leaves -->
+      <div class="card current--card">
+        <div class="card__image">
+          <img src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1200&q=80" alt="Leaves" />
+        </div>
+      </div>
+
+      <!-- Waves -->
+      <div class="card next--card">
+        <div class="card__image">
+          <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80" alt="Ocean Waves" />
+        </div>
+      </div>
+
+      <!-- Forest -->
+      <div class="card previous--card">
+        <div class="card__image">
+          <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=80" alt="Forest" />
+        </div>
+      </div>
+    </div>
+
+    <button class="cardList__btn btn btn--right">
+      <div class="icon">
+        <svg><use xlink:href="#arrow-right"></use></svg>
+      </div>
+    </button>
+  </div>
+
+  <div class="infoList">
+    <div class="info__wrapper">
+      <div class="info current--info">
+        <h1 class="text name">Leaves</h1>
+        <h4 class="text location">Macro</h4>
+        <p class="text description">Fresh veins, crisp detail.</p>
+      </div>
+
+      <div class="info next--info">
+        <h1 class="text name">Waves</h1>
+        <h4 class="text location">Pacific</h4>
+        <p class="text description">Roll with the tide.</p>
+      </div>
+
+      <div class="info previous--info">
+        <h1 class="text name">Forest</h1>
+        <h4 class="text location">Evergreen</h4>
+        <p class="text description">Breathe the quiet.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="app__bg">
+    <div class="app__bg__image current--image">
+      <img src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1600&q=80" alt="" />
+    </div>
+    <div class="app__bg__image next--image">
+      <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80" alt="" />
+    </div>
+    <div class="app__bg__image previous--image">
+      <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1600&q=80" alt="" />
+    </div>
+
+    <!-- NEW animated waves overlay -->
+    <svg class="bg-waves" viewBox="0 0 1440 320" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0,256L48,229.3C96,203,192,149,288,138.7C384,128,480,160,576,165.3C672,171,768,149,864,149.3C960,149,1056,171,1152,181.3C1248,192,1344,192,1392,192L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"/>
+    </svg>
+  </div>
+</div>
+
+<div class="loading__wrapper">
+  <div class="loader--text">Loading...</div>
+  <div class="loader"><span></span></div>
+</div>
+
+<svg class="icons" style="display:none">
+  <symbol id="arrow-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+    <polyline points="328 112 184 256 328 400"
+      style="fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:48px"/>
+  </symbol>
+  <symbol id="arrow-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+    <polyline points="184 112 328 256 184 400"
+      style="fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:48px"/>
+  </symbol>
+</svg>
+
+<script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.3.3/gsap.min.js"></script>
+<script src="./script.js"></script>
+</body>
+</html>

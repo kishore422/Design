@@ -1,0 +1,137 @@
+/* Reset / Base */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --glass-bg: rgba(255,255,255,0.12);
+  --glass-border: rgba(255,255,255,0.28);
+  --text: #ffffff;
+}
+html, body { height: 100%; }
+body { font-family: "Poppins", sans-serif; }
+
+/* Section background with safe fallback color + reliable image */
+section {
+  position: relative;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: #0b1020 url("https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?q=80&w=1920&auto=format&fit=crop") center/cover no-repeat fixed;
+}
+
+/* Optional dark overlay so white text is readable even if image is bright */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.45), rgba(0,0,0,0.65));
+  pointer-events: none;
+}
+
+/* Card */
+.form-box {
+  position: relative;
+  width: min(92vw, 420px);
+  border-radius: 20px;
+  padding: 36px 28px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+  color: var(--text);
+}
+
+h2 {
+  text-align: center;
+  font-weight: 600;
+  letter-spacing: .5px;
+  margin-bottom: 10px;
+}
+
+/* Inputs */
+.inputbox {
+  position: relative;
+  margin: 28px 0;
+  border-bottom: 1.8px solid rgba(255,255,255,0.8);
+}
+
+.inputbox input {
+  width: 100%;
+  height: 50px;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text);
+  font-size: 1rem;
+  padding: 0 40px 0 6px;
+}
+
+.inputbox label {
+  position: absolute;
+  left: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: .98rem;
+  color: rgba(255,255,255,0.9);
+  pointer-events: none;
+  transition: .25s ease;
+}
+
+/* Float label on focus or when filled */
+.inputbox input:focus ~ label,
+.inputbox input:not(:placeholder-shown) ~ label,
+.inputbox input:valid ~ label {
+  top: -8px;
+  font-size: .78rem;
+  opacity: 0.9;
+}
+
+.inputbox ion-icon {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2rem;
+  opacity: .9;
+}
+
+/* Remember / Forgot */
+.forget {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: .92rem;
+  margin: 6px 0 18px;
+  gap: 12px;
+}
+
+.remember { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; }
+.forget .forgot { color: #fff; text-decoration: none; }
+.forget .forgot:hover { text-decoration: underline; }
+
+/* Button */
+button {
+  width: 100%;
+  height: 44px;
+  border-radius: 999px;
+  border: none;
+  background: #ffffff;
+  color: #0b1020;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform .08s ease, box-shadow .2s ease;
+  box-shadow: 0 8px 20px rgba(255,255,255,0.15);
+}
+button:active { transform: translateY(1px); }
+
+/* Register */
+.register {
+  text-align: center;
+  font-size: .95rem;
+  margin-top: 18px;
+}
+.register a { color: #fff; font-weight: 600; text-decoration: none; }
+.register a:hover { text-decoration: underline; }
+
+/* Small screens */
+@media (max-width: 420px) {
+  .form-box { padding: 30px 22px; }
+}

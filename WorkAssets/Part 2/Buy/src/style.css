@@ -1,0 +1,88 @@
+@layer base, layout, components;
+
+/* ---------- Base ---------- */
+@layer base {
+  *,*::before,*::after { box-sizing: border-box; }
+  html,body { height: 100%; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    font-family: "League Spartan", system-ui, sans-serif;
+    font-size: 1.1rem; line-height: 1.25;
+    background:#212121; color:#ddd;
+  }
+  ul[role="list"] { list-style: none; padding: 0; margin: 0; }
+  .flow > * + * { margin-top: var(--flow-space, 1.25em); }
+}
+
+/* ---------- Layout ---------- */
+@layer layout {
+  .main { max-width: 75rem; padding: 3rem 1.5rem; width: 100%; }
+  .main__heading { text-align: center; color:#eceff1; font-weight: 700; font-size: 2.25em; margin-bottom:.75em; }
+
+  .cards { position: relative; }
+  .cards__inner { display:flex; flex-wrap: wrap; gap: 2rem; }
+}
+
+/* ---------- Components ---------- */
+@layer components {
+  .card {
+    --flow-space: .5em;
+    --hsl: var(--hue), var(--sat), var(--lit);
+    flex: 1 1 14rem;
+    padding: 1.5rem 2rem;
+    display: grid;
+    grid-template-rows: auto auto auto 1fr;
+    gap: 1.1rem;
+    background:#2b2b2b; color:#eceff1;
+    border: 1px solid #eceff133; border-radius: 14px;
+  }
+
+  .card:nth-child(1){ --hue:165; --sat:82.26%; --lit:51.37%; }
+  .card:nth-child(2){ --hue:291.34; --sat:95.9%;  --lit:61.76%; }
+  .card:nth-child(3){ --hue:338.69; --sat:100%;   --lit:48.04%; }
+
+  .card__heading { font-size:1.1em; font-weight:600; }
+  .card__price { font-size:1.8em; font-weight:800; }
+  .card__bullets { line-height:1.4; }
+
+  .card__bullets li::before{
+    content:"";
+    display:inline-block; width:16px; height:16px; margin-right: .6ch;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' fill='%23ddd'%3E%3Cpath d='M173.9 439.4l-166.4-166.4c-10-10-10-26.2 0-36.2l36.2-36.2c10-10 26.2-10 36.2 0L192 312.7 432.1 72.6c10-10 26.2-10 36.2 0l36.2 36.2c10 10 10 26.2 0 36.2L210.1 439.4c-10 10-26.2 10-36.2 0z'/%3E%3C/svg%3E") center/contain no-repeat;
+    transform: translateY(.2ch);
+  }
+
+  .cta{
+    align-self:end;
+    display:block; text-align:center; text-decoration:none; font-weight:700;
+    color:#fff; background:#0d0d0d; padding:.7rem; border-radius:10px;
+    margin-top:1rem;
+  }
+
+  /* Overlay spotlight */
+  .overlay {
+    position:absolute; inset:0;
+    pointer-events:none; user-select:none;
+    opacity: var(--opacity, 0);
+    -webkit-mask: radial-gradient(25rem 25rem at var(--x) var(--y), #000 1%, transparent 50%);
+            mask: radial-gradient(25rem 25rem at var(--x) var(--y), #000 1%, transparent 50%);
+    transition: 300ms mask ease;
+    will-change: mask;
+  }
+  .overlay .card{
+    background: hsla(var(--hsl), .15);
+    border-color: hsla(var(--hsl), 1);
+    box-shadow: 0 0 0 1px inset hsl(var(--hsl));
+  }
+  .overlay .cta{
+    background: hsl(var(--hsl));
+    box-shadow: 0 0 0 1px hsl(var(--hsl));
+  }
+
+  /* Nice hover for the base cards too */
+  .cards__inner > .card{ transition: background .3s ease; }
+  .cards__inner > .card:hover{ background: hsla(var(--hsl), .10); }
+}

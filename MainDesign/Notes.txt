@@ -1,0 +1,28 @@
+# Set your folder name
+$folderName = "foldername"
+
+# Create folder if it doesn't exist
+if (-not (Test-Path -Path $folderName)) {
+    New-Item -ItemType Directory -Path $folderName | Out-Null
+}
+
+# Define file paths
+$indexFile  = Join-Path $folderName "index.html"
+$styleFile  = Join-Path $folderName "styles.css"
+$scriptFile = Join-Path $folderName "script.js"
+
+# Create empty files (or overwrite if they exist)
+New-Item -Path $indexFile  -ItemType File -Force | Out-Null
+New-Item -Path $styleFile  -ItemType File -Force | Out-Null
+New-Item -Path $scriptFile -ItemType File -Force | Out-Null
+
+Write-Host "Created folder and files inside: $folderName"
+
+
+git init
+git add .
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/<your-username>/<repo-name>.git
+git push -u origin main
+

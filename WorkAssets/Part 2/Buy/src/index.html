@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pricing</title>
+  <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; min-height:100vh; display:grid; place-items:center;
+      font-family:"League Spartan",system-ui,sans-serif; background:#212121; color:#ddd;
+    }
+    .flow>*+*{margin-top:var(--flow-space,1.25em)}
+    .main{max-width:75rem; width:100%; padding:3rem 1.5rem}
+    .main__heading{color:#eceff1; text-align:center; font-size:2.25rem; font-weight:800; margin-bottom:.75em}
+    .cards{position:relative}
+    .cards__inner{display:flex; flex-wrap:wrap; gap:2rem}
+    .card{
+      --h:0; --s:0%; --l:60%;
+      flex:1 1 14rem; padding:1.5rem 2rem;
+      display:grid; grid-template-rows:auto auto auto 1fr; gap:1.1rem;
+      background:#2b2b2b; color:#eceff1; border:1px solid #eceff133; border-radius:14px;
+      transition:background .3s ease, border-color .3s ease, box-shadow .3s ease;
+    }
+    .card:nth-child(1){--h:165; --s:82%; --l:51%}
+    .card:nth-child(2){--h:291; --s:96%; --l:62%}
+    .card:nth-child(3){--h:339; --s:100%; --l:48%}
+
+    .card__heading{font-size:1.15rem; font-weight:700}
+    .card__price{font-size:1.9rem; font-weight:800}
+    ul[role="list"]{list-style:none; padding:0; margin:0}
+    .card__bullets{line-height:1.45}
+    .card__bullets li::before{
+      content:""; display:inline-block; width:16px; height:16px; margin-right:.6ch; transform:translateY(.2ch);
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' fill='%23ddd'%3E%3Cpath d='M173.9 439.4l-166.4-166.4c-10-10-10-26.2 0-36.2l36.2-36.2c10-10 26.2-10 36.2 0L192 312.7 432.1 72.6c10-10 26.2-10 36.2 0l36.2 36.2c10 10 10 26.2 0 36.2L210.1 439.4c-10 10-26.2 10-36.2 0z'/%3E%3C/svg%3E") center/contain no-repeat;
+    }
+    .cta{
+      align-self:end; display:block; text-align:center; text-decoration:none; font-weight:700;
+      color:#fff; background:#0d0d0d; padding:.7rem; border-radius:10px; margin-top:1rem;
+      box-shadow:0 0 0 1px rgba(255,255,255,.06) inset;
+    }
+    /* nice hover highlight */
+    .cards__inner > .card:hover{
+      background: hsla(var(--h), var(--s), var(--l), .10);
+      border-color: hsl(var(--h), var(--s), var(--l));
+      box-shadow: 0 0 0 1px inset hsl(var(--h), var(--s), var(--l));
+    }
+  </style>
+</head>
+<body>
+  <main class="main flow">
+    <h1 class="main__heading">Pricing</h1>
+
+    <div class="main__cards cards">
+      <div class="cards__inner">
+        <div class="cards__card card">
+          <h2 class="card__heading">Basic</h2>
+          <p class="card__price">$9.99</p>
+          <ul role="list" class="card__bullets flow">
+            <li>Access to standard workouts and nutrition plans</li>
+            <li>Email support</li>
+          </ul>
+          <a href="#basic" class="card__cta cta">Get Started</a>
+        </div>
+
+        <div class="cards__card card">
+          <h2 class="card__heading">Pro</h2>
+          <p class="card__price">$19.99</p>
+          <ul role="list" class="card__bullets flow">
+            <li>Access to advanced workouts and nutrition plans</li>
+            <li>Priority Email support</li>
+            <li>Exclusive access to live Q&amp;A sessions</li>
+          </ul>
+          <a href="#pro" class="card__cta cta">Upgrade to Pro</a>
+        </div>
+
+        <div class="cards__card card">
+          <h2 class="card__heading">Ultimate</h2>
+          <p class="card__price">$29.99</p>
+          <ul role="list" class="card__bullets flow">
+            <li>Access to all premium workouts and nutrition plans</li>
+            <li>24/7 Priority support</li>
+            <li>1-on-1 virtual coaching monthly</li>
+            <li>Exclusive content &amp; early access</li>
+          </ul>
+          <a href="#ultimate" class="card__cta cta">Go Ultimate</a>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

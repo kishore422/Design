@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitTrack - Fitness Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #6a11cb;
+            --secondary: #2575fc;
+            --accent: #ff6b6b;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #38b000;
+            --warning: #ff9e00;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-icon {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 25px;
+        }
+
+        .sidebar {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            height: fit-content;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .sidebar-menu li {
+            padding: 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 500;
+            color: #555;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-bottom: 1px solid #f1f1f1;
+        }
+
+        .sidebar-menu li:hover {
+            color: var(--primary);
+        }
+
+        .sidebar-menu li.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .sidebar-menu li i {
+            width: 20px;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .welcome-banner {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 20px;
+            padding: 25px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .welcome-text h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .welcome-text p {
+            opacity: 0.9;
+        }
+
+        .banner-cta {
+            background: white;
+            color: var(--primary);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .banner-cta:hover {
+            transform: translateY(-3px);
+        }
+
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-card .value {
+            font-size: 32px;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        .stat-card .label {
+            color: #777;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .stat-card .icon {
+            align-self: flex-end;
+            font-size: 24px;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 10px;
+        }
+
+        .progress-section {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .view-all {
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .progress-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .progress-card {
+            background: linear-gradient(135deg, #f6f9fc 0%, #eef2f7 100%);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .progress-title {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .progress-value {
+            font-weight: 700;
+            font-size: 18px;
+            color: var(--primary);
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 10px;
+        }
+
+        .workout-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .workout-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .workout-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .workout-title {
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .workout-details {
+            display: flex;
+            gap: 15px;
+        }
+
+        .workout-metric {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 12px;
+            flex: 1;
+        }
+
+        .metric-value {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .metric-label {
+            font-size: 14px;
+            color: #6c757d;
+        }
+
+        .color-1 { background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%); }
+        .color-2 { background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); }
+        .color-3 { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); }
+        .color-4 { background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%); }
+
+        .icon-1 { background: rgba(255, 154, 158, 0.2); color: #ff9a9e; }
+        .icon-2 { background: rgba(161, 196, 253, 0.2); color: #a1c4fd; }
+        .icon-3 { background: rgba(255, 236, 210, 0.2); color: #ffecd2; }
+        .icon-4 { background: rgba(132, 250, 176, 0.2); color: #84fab0; }
+
+        .fill-1 { background: linear-gradient(90deg, #ff9a9e 0%, #fad0c4 100%); width: 75%; }
+        .fill-2 { background: linear-gradient(90deg, #a1c4fd 0%, #c2e9fb 100%); width: 60%; }
+        .fill-3 { background: linear-gradient(90deg, #ffecd2 0%, #fcb69f 100%); width: 85%; }
+        .fill-4 { background: linear-gradient(90deg, #84fab0 0%, #8fd3f4 100%); width: 45%; }
+
+        @media (max-width: 992px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stats-cards,
+            .progress-cards,
+            .workout-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .welcome-banner {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+            
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .user-profile {
+                align-self: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
+                <span>FitTrack</span>
+            </div>
+            <div class="user-profile">
+                <div class="user-avatar">JS</div>
+                <div class="user-info">
+                    <div class="user-name">Jane Smith</div>
+                    <div class="user-level">Premium Member</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="dashboard">
+            <div class="sidebar">
+                <h3>Dashboard</h3>
+                <ul class="sidebar-menu">
+                    <li class="active"><i class="fas fa-home"></i> Overview</li>
+                    <li><i class="fas fa-running"></i> Workouts</li>
+                    <li><i class="fas fa-chart-line"></i> Activity</li>
+                    <li><i class="fas fa-weight"></i> Nutrition</li>
+                    <li><i class="fas fa-heart"></i> Health</li>
+                    <li><i class="fas fa-trophy"></i> Achievements</li>
+                    <li><i class="fas fa-cog"></i> Settings</li>
+                </ul>
+            </div>
+
+            <div class="main-content">
+                <div class="welcome-banner">
+                    <div class="welcome-text">
+                        <h2>Good morning, Jane!</h2>
+                        <p>You have 2 workouts planned for today. Let's get moving!</p>
+                    </div>
+                    <button class="banner-cta">Start Workout</button>
+                </div>
+
+                <div class="stats-cards">
+                    <div class="stat-card">
+                        <span class="label"><i class="fas fa-fire"></i> Calories Burned</span>
+                        <span class="value">1,842</span>
+                        <i class="fas fa-fire icon icon-1"></i>
+                    </div>
+                    <div class="stat-card">
+                        <span class="label"><i class="fas fa-shoe-prints"></i> Steps Today</span>
+                        <span class="value">8,567</span>
+                        <i class="fas fa-shoe-prints icon icon-2"></i>
+                    </div>
+                    <div class="stat-card">
+                        <span class="label"><i class="fas fa-clock"></i> Active Minutes</span>
+                        <span class="value">72</span>
+                        <i class="fas fa-clock icon icon-3"></i>
+                    </div>
+                </div>
+
+                <div class="progress-section">
+                    <div class="section-header">
+                        <h3 class="section-title">Weekly Progress</h3>
+                        <a href="#" class="view-all">View Details</a>
+                    </div>
+                    <div class="progress-cards">
+                        <div class="progress-card">
+                            <div class="progress-header">
+                                <div class="progress-title">Steps</div>
+                                <div class="progress-value">75%</div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill fill-1"></div>
+                            </div>
+                        </div>
+                        <div class="progress-card">
+                            <div class="progress-header">
+                                <div class="progress-title">Calories</div>
+                                <div class="progress-value">60%</div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill fill-2"></div>
+                            </div>
+                        </div>
+                        <div class="progress-card">
+                            <div class="progress-header">
+                                <div class="progress-title">Workouts</div>
+                                <div class="progress-value">85%</div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill fill-3"></div>
+                            </div>
+                        </div>
+                        <div class="progress-card">
+                            <div class="progress-header">
+                                <div class="progress-title">Sleep</div>
+                                <div class="progress-value">45%</div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill fill-4"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="progress-section">
+                    <div class="section-header">
+                        <h3 class="section-title">Today's Activity</h3>
+                        <a href="#" class="view-all">View History</a>
+                    </div>
+                    <div class="workout-stats">
+                        <div class="workout-card">
+                            <div class="workout-header">
+                                <div class="workout-title">Morning Run</div>
+                                <div class="workout-time">45 min</div>
+                            </div>
+                            <div class="workout-details">
+                                <div class="workout-metric">
+                                    <div class="metric-value">5.2km</div>
+                                    <div class="metric-label">Distance</div>
+                                </div>
+                                <div class="workout-metric">
+                                    <div class="metric-value">427</div>
+                                    <div class="metric-label">Calories</div>
+                                </div>
+                                <div class="workout-metric">
+                                    <div class="metric-value">6'30"</div>
+                                    <div class="metric-label">Avg Pace</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="workout-card">
+                            <div class="workout-header">
+                                <div class="workout-title">Evening Yoga</div>
+                                <div class="workout-time">30 min</div>
+                            </div>
+                            <div class="workout-details">
+                                <div class="workout-metric">
+                                    <div class="metric-value">92%</div>
+                                    <div class="metric-label">Form</div>
+                                </div>
+                                <div class="workout-metric">
+                                    <div class="metric-value">210</div>
+                                    <div class="metric-label">Calories</div>
+                                </div>
+                                <div class="workout-metric">
+                                    <div class="metric-value">18</div>
+                                    <div class="metric-label">Poses</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple interactivity for the sidebar menu
+        document.querySelectorAll('.sidebar-menu li').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelector('.sidebar-menu li.active').classList.remove('active');
+                this.classList.add('active');
+            });
+        });
+        
+        // Animate progress bars on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const progressFills = document.querySelectorAll('.progress-fill');
+            progressFills.forEach(fill => {
+                const width = fill.style.width;
+                fill.style.width = '0';
+                setTimeout(() => {
+                    fill.style.transition = 'width 1.5s ease-in-out';
+                    fill.style.width = width;
+                }, 300);
+            });
+        });
+    </script>
+</body>
+</html>

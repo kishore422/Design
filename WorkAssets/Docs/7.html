@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow - Productivity Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1f2937;
+            --light: #f9fafb;
+            --gray: #6b7280;
+            --gray-light: #e5e7eb;
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+            --card-hover-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        body {
+            background-color: #f3f4f6;
+            color: var(--dark);
+            line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 260px;
+            background: white;
+            box-shadow: var(--card-shadow);
+            padding: 24px 0;
+            display: flex;
+            flex-direction: column;
+            z-index: 10;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 24px 24px;
+            margin-bottom: 16px;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex: 1;
+        }
+
+        .nav-item {
+            margin-bottom: 4px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 24px;
+            text-decoration: none;
+            color: var(--gray);
+            font-weight: 500;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background-color: #f5f7ff;
+            color: var(--primary);
+            border-left-color: var(--primary);
+        }
+
+        .nav-link i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-footer {
+            padding: 16px 24px 0;
+            margin-top: auto;
+            border-top: 1px solid var(--gray-light);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-info h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .user-info p {
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .page-title h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .page-title p {
+            color: var(--gray);
+            margin-top: 4px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--gray-light);
+            color: var(--dark);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            padding: 24px;
+            transition: all 0.3s;
+        }
+
+        .card:hover {
+            box-shadow: var(--card-hover-shadow);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--light);
+            color: var(--dark);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .icon-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            grid-column: span 12;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        .stat-card {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 8px 0;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        .stat-change {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        .positive {
+            color: var(--secondary);
+        }
+
+        .negative {
+            color: var(--danger);
+        }
+
+        /* Tasks Card */
+        .tasks-card {
+            grid-column: span 8;
+        }
+
+        .task-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .task-item:last-child {
+            border-bottom: none;
+        }
+
+        .task-checkbox {
+            margin-right: 16px;
+        }
+
+        .task-content {
+            flex: 1;
+        }
+
+        .task-title {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .task-details {
+            display: flex;
+            gap: 16px;
+            font-size: 13px;
+            color: var(--gray);
+        }
+
+        .task-priority {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .priority-high {
+            background-color: #fee2e2;
+            color: var(--danger);
+        }
+
+        .priority-medium {
+            background-color: #fef3c7;
+            color: var(--accent);
+        }
+
+        .priority-low {
+            background-color: #d1fae5;
+            color: var(--secondary);
+        }
+
+        /* Progress Card */
+        .progress-card {
+            grid-column: span 4;
+        }
+
+        .progress-circle {
+            width: 160px;
+            height: 160px;
+            margin: 0 auto;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .circle-bg {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: var(--gray-light);
+        }
+
+        .circle-progress {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            clip: rect(0, 80px, 160px, 0);
+            background: var(--primary);
+        }
+
+        .progress-text {
+            position: absolute;
+            text-align: center;
+        }
+
+        .progress-percent {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .progress-label {
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        /* Activity Card */
+        .activity-card {
+            grid-column: span 6;
+        }
+
+        .activity-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .activity-item {
+            display: flex;
+            gap: 16px;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f5f7ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .activity-time {
+            font-size: 13px;
+            color: var(--gray);
+        }
+
+        /* Projects Card */
+        .projects-card {
+            grid-column: span 6;
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .project-item {
+            background: var(--light);
+            border-radius: 8px;
+            padding: 16px;
+            transition: all 0.3s;
+        }
+
+        .project-item:hover {
+            background: #f0f4ff;
+        }
+
+        .project-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .project-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: #e0e7ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+        }
+
+        .project-title {
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .project-progress {
+            height: 6px;
+            background: var(--gray-light);
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+
+        .project-progress-bar {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 3px;
+        }
+
+        .project-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: var(--gray);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .tasks-card {
+                grid-column: span 12;
+            }
+            
+            .progress-card {
+                grid-column: span 12;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .activity-card, .projects-card {
+                grid-column: span 12;
+            }
+            
+            .project-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                padding: 16px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+            
+            .header-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-tasks"></i>
+            </div>
+            <span class="logo-text">TaskFlow</span>
+        </div>
+        
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="#" class="nav-link active">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-check-circle"></i>
+                    <span>My Tasks</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-project-diagram"></i>
+                    <span>Projects</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Calendar</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>Reports</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </li>
+        </ul>
+        
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="User" class="user-avatar">
+                <div class="user-info">
+                    <h4>John Anderson</h4>
+                    <p>Project Manager</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="header">
+            <div class="page-title">
+                <h1>Dashboard</h1>
+                <p>Welcome back! Here's what's happening with your projects.</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-outline">
+                    <i class="fas fa-filter"></i> Filter
+                </button>
+                <button class="btn btn-primary">
+                    <i class="fas fa-plus"></i> New Task
+                </button>
+            </div>
+        </div>
+        
+        <div class="dashboard-grid">
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="card stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-tasks" style="color: var(--primary);"></i>
+                    </div>
+                    <div class="stat-value">24</div>
+                    <div class="stat-label">Total Tasks</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i> 12% from last week
+                    </div>
+                </div>
+                
+                <div class="card stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle" style="color: var(--secondary);"></i>
+                    </div>
+                    <div class="stat-value">18</div>
+                    <div class="stat-label">Completed</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i> 8% from last week
+                    </div>
+                </div>
+                
+                <div class="card stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock" style="color: var(--accent);"></i>
+                    </div>
+                    <div class="stat-value">4</div>
+                    <div class="stat-label">In Progress</div>
+                    <div class="stat-change negative">
+                        <i class="fas fa-arrow-down"></i> 3% from last week
+                    </div>
+                </div>
+                
+                <div class="card stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-exclamation-circle" style="color: var(--danger);"></i>
+                    </div>
+                    <div class="stat-value">2</div>
+                    <div class="stat-label">Overdue</div>
+                    <div class="stat-change negative">
+                        <i class="fas fa-arrow-up"></i> 1% from last week
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tasks Card -->
+            <div class="card tasks-card">
+                <div class="card-header">
+                    <h2 class="card-title">Recent Tasks</h2>
+                    <div class="card-actions">
+                        <button class="icon-btn">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <ul class="task-list">
+                    <li class="task-item">
+                        <input type="checkbox" class="task-checkbox">
+                        <div class="task-content">
+                            <h3 class="task-title">Create dashboard design mockups</h3>
+                            <div class="task-details">
+                                <span>Today, 10:00 AM</span>
+                                <span class="task-priority priority-high">High Priority</span>
+                            </div>
+                        </div>
+                    </li>
+                    
+                    <li class="task-item">
+                        <input type="checkbox" class="task-checkbox" checked>
+                        <div class="task-content">
+                            <h3 class="task-title">Review client feedback</h3>
+                            <div class="task-details">
+                                <span>Today, 11:30 AM</span>
+                                <span class="task-priority priority-medium">Medium Priority</span>
+                            </div>
+                        </div>
+                    </li>
+                    
+                    <li class="task-item">
+                        <input type="checkbox" class="task-checkbox">
+                        <div class="task-content">
+                            <h3 class="task-title">Update project documentation</h3>
+                            <div class="task-details">
+                                <span>Tomorrow, 9:00 AM</span>
+                                <span class="task-priority priority-low">Low Priority</span>
+                            </div>
+                        </div>
+                    </li>
+                    
+                    <li class="task-item">
+                        <input type="checkbox" class="task-checkbox">
+                        <div class="task-content">
+                            <h3 class="task-title">Prepare presentation for meeting</h3>
+                            <div class="task-details">
+                                <span>Tomorrow, 2:00 PM</span>
+                                <span class="task-priority priority-high">High Priority</span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Progress Card -->
+            <div class="card progress-card">
+                <div class="card-header">
+                    <h2 class="card-title">Overall Progress</h2>
+                    <div class="card-actions">
+                        <button class="icon-btn">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="progress-circle">
+                    <div class="circle-bg"></div>
+                    <div class="circle-progress" style="transform: rotate(72deg);"></div>
+                    <div class="progress-text">
+                        <div class="progress-percent">72%</div>
+                        <div class="progress-label">Completed</div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 20px;">
+                    <p>18 of 24 tasks completed</p>
+                    <p style="color: var(--gray); font-size: 14px; margin-top: 8px;">You're doing great! Keep it up.</p>
+                </div>
+            </div>
+            
+            <!-- Activity Card -->
+            <div class="card activity-card">
+                <div class="card-header">
+                    <h2 class="card-title">Recent Activity</h2>
+                    <div class="card-actions">
+                        <button class="icon-btn">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <ul class="activity-list">
+                    <li class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="activity-content">
+                            <h3 class="activity-title">You completed "Design new icons" task</h3>
+                            <p class="activity-time">2 hours ago</p>
+                        </div>
+                    </li>
+                    
+                    <li class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-plus"></i>
+                        </div>
+                        <div class="activity-content">
+                            <h3 class="activity-title">You added "Research competitors" task</h3>
+                            <p class="activity-time">4 hours ago</p>
+                        </div>
+                    </li>
+                    
+                    <li class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-comment"></i>
+                        </div>
+                        <div class="activity-content">
+                            <h3 class="activity-title">You commented on "Website redesign" project</h3>
+                            <p class="activity-time">Yesterday</p>
+                        </div>
+                    </li>
+                    
+                    <li class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-share-alt"></i>
+                        </div>
+                        <div class="activity-content">
+                            <h3 class="activity-title">You shared "Q3 Planning" project with team</h3>
+                            <p class="activity-time">2 days ago</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Projects Card -->
+            <div class="card projects-card">
+                <div class="card-header">
+                    <h2 class="card-title">Projects</h2>
+                    <div class="card-actions">
+                        <button class="icon-btn">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="project-grid">
+                    <div class="project-item">
+                        <div class="project-header">
+                            <div class="project-icon">
+                                <i class="fas fa-globe"></i>
+                            </div>
+                            <span class="task-priority priority-high">3 Days Left</span>
+                        </div>
+                        <h3 class="project-title">Website Redesign</h3>
+                        <p style="color: var(--gray); font-size: 14px;">Complete the homepage redesign</p>
+                        <div class="project-progress">
+                            <div class="project-progress-bar" style="width: 65%;"></div>
+                        </div>
+                        <div class="project-stats">
+                            <span>65% Complete</span>
+                            <span>12/18 Tasks</span>
+                        </div>
+                    </div>
+                    
+                    <div class="project-item">
+                        <div class="project-header">
+                            <div class="project-icon">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
+                            <span class="task-priority priority-medium">1 Week Left</span>
+                        </div>
+                        <h3 class="project-title">Mobile App Update</h3>
+                        <p style="color: var(--gray); font-size: 14px;">Implement new user features</p>
+                        <div class="project-progress">
+                            <div class="project-progress-bar" style="width: 42%;"></div>
+                        </div>
+                        <div class="project-stats">
+                            <span>42% Complete</span>
+                            <span>8/19 Tasks</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Simple interactivity for task checkboxes
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkboxes = document.querySelectorAll('.task-checkbox');
+            
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const taskItem = this.closest('.task-item');
+                    if (this.checked) {
+                        taskItem.style.opacity = '0.7';
+                    } else {
+                        taskItem.style.opacity = '1';
+                    }
+                });
+            });
+            
+            // Update progress circle based on completed tasks
+            const completedTasks = document.querySelectorAll('.task-checkbox:checked').length;
+            const totalTasks = document.querySelectorAll('.task-checkbox').length;
+            const progressPercent = Math.round((completedTasks / totalTasks) * 100);
+            
+            const progressCircle = document.querySelector('.circle-progress');
+            const progressText = document.querySelector('.progress-percent');
+            
+            progressCircle.style.transform = `rotate(${progressPercent * 3.6}deg)`;
+            progressText.textContent = `${progressPercent}%`;
+            
+            // Update progress text
+            const progressStats = document.querySelector('.progress-card p');
+            progressStats.textContent = `${completedTasks} of ${totalTasks} tasks completed`;
+        });
+    </script>
+</body>
+</html>
